@@ -26,10 +26,10 @@ func TestRotate(t *testing.T) {
 			ouput:  []int32{1, 2, 3, 4, 5},
 		},
 		{
-			name:   "rotate an even number of times compare to len of the input",
+			name:   "rotate an odd number of times compare to len of the input",
 			input:  []int32{1, 2, 3, 4, 5},
-			rotate: 10000,
-			ouput:  []int32{1, 2, 3, 4, 5},
+			rotate: 10003,
+			ouput:  []int32{4, 5, 1, 2, 3},
 		},
 	}
 	for _, test := range testCases {
