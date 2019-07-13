@@ -1,11 +1,11 @@
 package user_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 	"time"
 
@@ -60,13 +60,18 @@ func TestHandleRegisterWithServer(t *testing.T) {
 	}
 	server := httptest.NewServer(router)
 	defer server.Close()
+
 	client := http.Client{
 		Timeout: time.Second,
 	}
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
 			test.tearDown()
-			r, err := http.NewRequest(http.MethodPost, server.URL+"/users", strings.NewReader(`{"id":"123","name":"jack"}`))
+			var inputBody bytes.Buffer
+			if err := json.NewEncoder(&inputBody).Encode(test.input); err != nil {
+				t.Error(err)
+			}
+			r, err := http.NewRequest(http.MethodPost, server.URL+"/users", &inputBody)
 			if err != nil {
 				t.Error(err)
 			}

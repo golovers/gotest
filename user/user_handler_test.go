@@ -1,6 +1,8 @@
 package user_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -57,7 +59,11 @@ func TestHandleRegister(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			test.tearDown()
 			w := httptest.NewRecorder()
-			r, err := http.NewRequest(http.MethodPost, "", strings.NewReader(`{"id":"123","name":"jack"}`))
+			var inputBody bytes.Buffer
+			if err := json.NewEncoder(&inputBody).Encode(test.input); err != nil {
+				t.Error(err)
+			}
+			r, err := http.NewRequest(http.MethodPost, "", &inputBody)
 			if err != nil {
 				t.Error(err)
 			}

@@ -1,6 +1,8 @@
 package user
 
-import "context"
+import (
+	"context"
+)
 
 type (
 	repository interface {
